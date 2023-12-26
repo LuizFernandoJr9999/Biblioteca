@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from hashlib import sha256
 
 def login(request):
-    return HttpResponse('login')
+    return render(request, 'login.html')
 
 def cadastro(request):
     return render(request, 'cadastro.html')
@@ -37,4 +37,8 @@ def valida_cadastro(request):
     except:
         return redirect('/auth/cadastro/?status=4')
 
-    return HttpResponse(f"{nome} {senha} {email} {usuario}")
+    #return HttpResponse(f"{nome} {senha} {email} {usuario}")
+def validar_login(request):
+    email = request.POST.get('email')
+    senha = request.POST.get('senha')
+    return HttpResponse(f"{email} {senha}")
