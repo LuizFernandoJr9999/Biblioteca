@@ -17,14 +17,14 @@ def valida_cadastro(request):
 
     usuario = Usuario.objects.filter(email = email)
 
+    if len(usuario) > 0:
+        return redirect('/auth/cadastro/?status=3')
+
     if len(nome.strip()) == 0 or len(email.strip()) == 0:
         return redirect('/auth/cadastro/?status=1')
 
     if len(senha) < 8:
         return redirect('/auth/cadastro/?status=2')
-
-    if len(usuario) > 0:
-        return redirect('/auth/cadastro/?status=3')
 
     try:
         senha = sha256(senha.encode()).hexdigest()
@@ -37,4 +37,4 @@ def valida_cadastro(request):
     except:
         return redirect('/auth/cadastro/?status=4')
 
-    #return HttpResponse(f"{nome} {senha} {email}")
+    return HttpResponse(f"{nome} {senha} {email} {usuario}")
