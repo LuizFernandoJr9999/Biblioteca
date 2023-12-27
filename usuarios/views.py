@@ -8,7 +8,10 @@ def login(request):
     return render(request, 'login.html')
 
 def cadastro(request):
-    return render(request, 'cadastro.html')
+    if request.session.get('usuario'):
+        return redirect('/livro/home')
+    status = request.GET.get('status')
+    return render(request, 'cadastro.html', {'status': status})
 
 def valida_cadastro(request):
     nome=request.POST.get('nome')
