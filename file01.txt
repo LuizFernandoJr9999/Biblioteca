@@ -18,4 +18,5 @@ data_cadastro = models.DateField(default = date.today)
     def __str__(self):
         return self.nome 
 
-        
+Em 27/12/2023 - Usuario: admin - Senha: 1234
+
