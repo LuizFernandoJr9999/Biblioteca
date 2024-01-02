@@ -3,39 +3,101 @@
 {% block 'conteudo' %}
     <div class="container"> 
       <br>
-      <p>
-        <label>Nome do livro:</label>  
-        <input class="form-control" type = "text" value="{{livro.nome}}" >
-      </p>
+      <form action="#" method="POST">
+       {% csrf_token %} 
+        <p>
+          <label>Nome do livro:</label>  
+          <input class="form-control" type = "text" value="{{livro.nome}}" >
+        </p>
 
-      <p>
-        <label>Autor:</label>  
-        <input style="width: 40%;" class="form-control" type = "text" value="{{livro.autor}}" >
-      </p>
-  
-      <p>
-        <label>Co-Autor:</label>  
-        <input style="width: 40%;" class="form-control" type = "text" value="{{livro.co_autor}}" >
-      </p>
+        <p>
+          <label>Autor:</label>  
+          <input style="width: 40%;" class="form-control" type = "text" value="{{livro.autor}}" >
+        </p>
+    
+        <p>
+          <label>Co-Autor:</label>  
+          <input style="width: 40%;" class="form-control" type = "text" value="{{livro.co_autor}}" >
+        </p>
 
-      <p>
-        <label>Data:</label>  
-        <input style="width: 40%;" class="form-control" type = "text" value="{{livro.data_cadastro}}" >
-      </p>
+        <p>
+          <label>Data:</label>  
+          <input style="width: 40%;" class="form-control" type = "text" value="{{livro.data_cadastro}}" >
+        </p>
 
-      <h1>{{livro.data_cadastro}}</h1>
+        <h1>{{livro.data_cadastro}}</h1>
 
-      <label>Emprestado &nbsp: &nbsp:</label>
-      {% if livro.emprestado %}
-        <input style="transform: scale(2.0);" checked type = "checkbox" name="emprestado">
-      {% else %}  
-        <input style="transform: scale(2.0);" type = "checkbox" name="emprestado">
-      {% endif %}
-        <br>  
-        <br>  
-        <button>Ver histórico de empréstimo</button>
+        <label>Categoria:</label>
+        <select style="width: 20%;" class="form-control" name="categoria_id">
+          {% for i in categoria_livro%}
 
-        <input type="submit" class = "btn btn-success btn-lg" value="Salvar">
+
+          {% if livro.categoria.nome == i.nome %}
+              <option value="{{i.id}}" selected>{{i}}</option>
+            {% else %}
+              <option value="{{i.id}}">{{i}} </option>
+            {% endif %}
+          {% endfor %}
+
+
+        </select>  
         
+        <br>
+        <br>
+        <label>Emprestado &nbsp: &nbsp:</label>
+        {% if livro.emprestado %}
+          <input style="transform: scale(2.0);" checked type = "checkbox" name="emprestado">
+        {% else %}  
+          <input style="transform: scale(2.0);" type = "checkbox" name="emprestado">
+        {% endif %}
+          <br>  
+          <br>  
+
+        <!-- O segundo valor estará selecionado inicialmente -->
+        <select name="select">
+          <option value="valor1">Valor 1</option>
+          <option value="valor2" selected>Valor 2</option>
+          <option value="valor3">Valor 3</option>
+        </select>
+
+        <br>
+        <br>
+        <input type="submit" class = "btn btn-success btn-lg" value="Salvar">
+      </form>
+      <hr>
+        <h2>Ver histórico de empréstimo</h2>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Nome</th>
+              <th scope="col">Data Emprestimo</th>
+              <th scope="col">Data devolução</th>
+              <th scope="col">Tempo de duração</th>
+              <th scope="col">Avaliação</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in emprestimos%}
+              <tr>
+                {% if i.nome_emprestado_anonimo == None %}
+                  <th scope="row">{{i.nome_emprestado}}</th>
+                {% else %}
+                <th scope="row">{{i.nome_emprestado_anonimo}}</th>
+                {% endif%}
+                <td>{{i.data_emprestimo}}</td>
+                <td>{{i.data_devolucao}}</td>
+                <td>
+                {% if i.avaliacao == None %}
+                  <button onclick="avaliacao({{i.id}})" class="btn btn-info" data-toggle="modal" data-target="#exampleModal1">AVALIAR</button>
+                {% else%}
+                  {{i.avaliacao}}
+    
+                {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    
     </div>    
 {% endblock %}
