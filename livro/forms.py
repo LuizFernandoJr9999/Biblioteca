@@ -9,6 +9,10 @@ class CadastroLivro(forms.ModelForm):
         fields = "__all__"
         #fields = ('nome', 'autor', 'co_autor', 'data_cadastro', 'emprestado', 'categoria')
 
+    def __init__ (self, *args, **kwargs):
+        super().__init__(*args, **kwargs)  
+        self.fields['usuario'].widget = forms.HiddenInput() 
+
 '''class CadastroLivro(forms.Form):
     nome = forms.CharField(max_length = 100)
     autor = forms.CharField(max_length = 30)
@@ -16,3 +20,11 @@ class CadastroLivro(forms.ModelForm):
     data_cadastro = forms.DateField()
     emprestado = forms.BooleanField()
 '''
+
+class CategoriaLivro(forms.Form):
+    nome = forms.CharField(max_length=30)
+    descricao = forms.CharField(max_length=60)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['descricao'].widget = forms.Textarea()
