@@ -11,10 +11,10 @@ from django.db.models import Q
 def home(request):
     if request.session.get('usuario'):
         usuario = Usuario.objects.get(id = request.session['usuario'])
-        livros = Livros.objects.filter(usuario = usuario)
+        livros = Livros.objects.filter(usuario = usuario).order_by("nome")
         form = CadastroLivro()
-        #print(form.fields)
-        #print(form.fields['nome'].widget)
+        form.fields['usuario'].initial = request.session['usuario']
+        form.fields['categoria'].queryset = Categoria.objects.filter(usuario = usuario)
 
 
         #return HttpResponse(f'Olá {usuario}')
@@ -36,7 +36,6 @@ def ver_livros(request, id):
             form.fields['categoria'].queryset = Categoria.objects.filter(usuario = usuario)
             #print(form.fields['categoria'].queryset)
             #form.fields['usuario'].widget = forms.HiddenInput()
-            #form.fields['categoria'].queryset = Categoria.objects.filter(usuario = usuario)
             
             #form_categoria = CategoriaLivro()
             usuarios = Usuario.objects.all()
