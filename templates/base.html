@@ -76,7 +76,8 @@
 
 
                 <div style="display: none;" id="categoria">
-                  <form action="{% url 'cadastrar_categoria' %}" method="POST">{% csrf_token %}
+                  <form action="{% url 'cadastrar_categoria' %}" method="POST">
+                    {% csrf_token %}
                     <table>
                       {{form_categoria.as_table}}
                     </table>

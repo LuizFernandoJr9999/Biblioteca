@@ -23,6 +23,7 @@ class CadastroLivro(forms.ModelForm):
 
 class CategoriaLivro(forms.Form):
     nome = forms.CharField(max_length=30)
+    #descricao = forms.CharField(max_length=60)
     descricao = forms.CharField(max_length=60)
 
     def __init__(self, *args, **kwargs):

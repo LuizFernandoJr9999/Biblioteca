@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from usuarios.models import Usuario
 from .models import Livros, Categoria, Emprestimos
-from .forms import CadastroLivro
+from .forms import CadastroLivro, CategoriaLivro
 from django import forms
 from django.db.models import Q
 
@@ -11,16 +11,22 @@ from django.db.models import Q
 def home(request):
     if request.session.get('usuario'):
         usuario = Usuario.objects.get(id = request.session['usuario'])
+        status_categoria = request.GET.get('cadastro_categoria')
         livros = Livros.objects.filter(usuario = usuario).order_by("nome")
         form = CadastroLivro()
         form.fields['usuario'].initial = request.session['usuario']
         form.fields['categoria'].queryset = Categoria.objects.filter(usuario = usuario)
 
+        form_categoria = CategoriaLivro()
+
 
         #return HttpResponse(f'Olá {usuario}')
         return render(request, 'home.html', {'livros': livros, 
                                              'usuario_logado': request.session.get('usuario'),
-                                             'form': form})
+                                             'form': form,
+                                             'status_categoria': status_categoria,
+                                             'form_categoria': form_categoria})
+
     else:
         return redirect('/auth/login/?status=2')
     
@@ -37,7 +43,7 @@ def ver_livros(request, id):
             #print(form.fields['categoria'].queryset)
             #form.fields['usuario'].widget = forms.HiddenInput()
             
-            #form_categoria = CategoriaLivro()
+            form_categoria = CategoriaLivro()
             usuarios = Usuario.objects.all()
 
             livros_emprestar = Livros.objects.filter(usuario = usuario).filter(emprestado = False)
@@ -48,7 +54,7 @@ def ver_livros(request, id):
                                                       'usuario_logado': request.session.get('usuario'),
                                                       'form': form,
                                                       'id_livro': id,
-                                                      #'form_categoria': form_categoria,
+                                                      'form_categoria': form_categoria,
                                                       'usuarios': usuarios,
                                                       'emprestimos': emprestimos,
                                                       'livros_emprestar': livros_emprestar,
@@ -86,7 +92,8 @@ def cadastrar_categoria(request):
     id_usuario = request.POST.get('usuario')
     if int(id_usuario) == int(request.session.get('usuario')):
         user = Usuario.objects.get(id = id_usuario)
-        categoria = Categoria(nome = nome, descricao = descricao, usuario = user )
+        #categoria = Categoria(nome = nome, descricao = descricao, usuario_id = id_usuario )
+        categoria = Categoria(nome = nome, descricao = descricao, usuario = user)
         categoria.save()
         return redirect('/livro/home?cadastro_categoria=1')
     else:
