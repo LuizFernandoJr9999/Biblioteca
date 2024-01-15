@@ -25,7 +25,8 @@ def home(request):
                                              'usuario_logado': request.session.get('usuario'),
                                              'form': form,
                                              'status_categoria': status_categoria,
-                                             'form_categoria': form_categoria})
+                                             'form_categoria': form_categoria,
+                                             'usuarios': usuario})
 
     else:
         return redirect('/auth/login/?status=2')
@@ -116,7 +117,6 @@ def cadastrar_emprestimo(request):
         livro = Livros.objects.get(id = livro_emprestado)
         livro.emprestado = True
         livro.save()
-
 
         return redirect('/livro/home')  
 
