@@ -8,4 +8,4 @@ def mostra_duracao(value1, value2):
     
     
     return (value1 - value2).days
-    
+    #return (5)

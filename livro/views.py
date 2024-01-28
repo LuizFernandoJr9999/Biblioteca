@@ -1,3 +1,4 @@
+from datetime import date, datetime 
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from usuarios.models import Usuario
@@ -19,6 +20,10 @@ def home(request):
 
         form_categoria = CategoriaLivro()
 
+        usuarios = Usuario.objects.all()
+
+        livros_emprestar = Livros.objects.filter(usuario = usuario).filter(emprestado = False)
+        livros_emprestados = Livros.objects.filter(usuario = usuario).filter(emprestado = True)
 
         #return HttpResponse(f'Olá {usuario}')
         return render(request, 'home.html', {'livros': livros, 
@@ -26,8 +31,9 @@ def home(request):
                                              'form': form,
                                              'status_categoria': status_categoria,
                                              'form_categoria': form_categoria,
-                                             'usuarios': usuario})
-
+                                             'usuarios': usuarios,
+                                             'livros_emprestar': livros_emprestar,
+                                             'livros_emprestados': livros_emprestados})
     else:
         return redirect('/auth/login/?status=2')
     
@@ -49,7 +55,7 @@ def ver_livros(request, id):
 
             livros_emprestar = Livros.objects.filter(usuario = usuario).filter(emprestado = False)
             livros_emprestados = Livros.objects.filter(usuario = usuario).filter(emprestado = True)
-            
+
             return render(request, 'ver_livro.html', {'livro': livro,
                                                       'categoria_livro': categoria_livro,
                                                       'usuario_logado': request.session.get('usuario'),
@@ -102,6 +108,7 @@ def cadastrar_categoria(request):
     
 def cadastrar_emprestimo(request):
     if request.method == 'POST':
+
         nome_emprestado = request.POST.get('nome_emprestado')
         nome_emprestado_anonimo = request.POST.get('nome_emprestado_anonimo')
         livro_emprestado = request.POST.get('livro_emprestado')
@@ -112,6 +119,9 @@ def cadastrar_emprestimo(request):
         else:
             emprestimo = Emprestimos(nome_emprestado_id=nome_emprestado,
                                     livro_id = livro_emprestado)
+        
+        #return HttpResponse(livro_emprestado)
+        
         emprestimo.save()
 
         livro = Livros.objects.get(id = livro_emprestado)
