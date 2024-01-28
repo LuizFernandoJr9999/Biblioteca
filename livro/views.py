@@ -14,6 +14,7 @@ def home(request):
         usuario = Usuario.objects.get(id = request.session['usuario'])
         status_categoria = request.GET.get('cadastro_categoria')
         livros = Livros.objects.filter(usuario = usuario).order_by("nome")
+        total_livros = livros.count()
         form = CadastroLivro()
         form.fields['usuario'].initial = request.session['usuario']
         form.fields['categoria'].queryset = Categoria.objects.filter(usuario = usuario)
@@ -33,7 +34,8 @@ def home(request):
                                              'form_categoria': form_categoria,
                                              'usuarios': usuarios,
                                              'livros_emprestar': livros_emprestar,
-                                             'livros_emprestados': livros_emprestados})
+                                             'livros_emprestados': livros_emprestados,
+                                             'total_livros': total_livros})
     else:
         return redirect('/auth/login/?status=2')
     
