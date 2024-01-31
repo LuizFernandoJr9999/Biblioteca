@@ -144,3 +144,22 @@ def devolver_livro(request):
 
     return redirect('/livro/home')
 
+def alterar_livro(request):
+    livro_id = request.POST.get('livro_id')
+    nome_livro = request.POST.get('nome_livro')
+    autor = request.POST.get('autor')
+    co_autor = request.POST.get('co_autor')
+    categoria_id = request.POST.get('categoria_id')
+
+    categoria = Categoria.objects.get(id = categoria_id)
+
+    livro = Livros.objects.get(id = livro_id)
+    if livro.usuario.id == request.session['usuario']:
+        livro.nome = nome_livro
+        livro.autor = autor
+        livro.co_autor = co_autor
+        livro.categoria = categoria 
+        livro.save()
+        return redirect(f'/livro/ver_livros/{livro_id}')        
+    else:
+        return redirect('/auth/sair')
