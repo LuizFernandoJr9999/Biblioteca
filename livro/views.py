@@ -163,3 +163,4 @@ def alterar_livro(request):
         return redirect(f'/livro/ver_livros/{livro_id}')        
     else:
         return redirect('/auth/sair')
+    
