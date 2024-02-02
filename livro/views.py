@@ -168,6 +168,9 @@ def processa_avaliacao(request):
     id_emprestimo = request.POST.get('id_emprestimo')
     opcoes = request.POST.get('opcoes')
     id_livro = request.POST.get('id_livro')
+    id_usuario_logado = request.session['usuario']
+
+
     #print(request.POST)
     #print(id_emprestimo)
     #return HttpResponse( f"{id_emprestimo} {opcoes}")
@@ -175,7 +178,9 @@ def processa_avaliacao(request):
     #TODO: Não permitir avaliação de livro não devolvido
     #TODO: Colocar as estrelas
     emprestimo = Emprestimos.objects.get(id = id_emprestimo)
-    emprestimo.avaliacao = opcoes
-    emprestimo.save()
-
-    return redirect(f'/livro/ver_livros/{id_livro}')
+    if emprestimo.livro.usuario.id == request.session['usuario']:
+        emprestimo.avaliacao = opcoes
+        emprestimo.save()
+        return redirect(f'/livro/ver_livros/{id_livro}')
+    else:
+        return HttpResponse('Esse empréstimo não é seu.') 
