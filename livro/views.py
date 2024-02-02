@@ -164,3 +164,18 @@ def alterar_livro(request):
     else:
         return redirect('/auth/sair')
     
+def processa_avaliacao(request):
+    id_emprestimo = request.POST.get('id_emprestimo')
+    opcoes = request.POST.get('opcoes')
+    id_livro = request.POST.get('id_livro')
+    #print(request.POST)
+    #print(id_emprestimo)
+    #return HttpResponse( f"{id_emprestimo} {opcoes}")
+    #TODO: Verificar segurança
+    #TODO: Não permitir avaliação de livro não devolvido
+    #TODO: Colocar as estrelas
+    emprestimo = Emprestimos.objects.get(id = id_emprestimo)
+    emprestimo.avaliacao = opcoes
+    emprestimo.save()
+
+    return redirect(f'/livro/ver_livros/{id_livro}')
