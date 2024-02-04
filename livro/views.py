@@ -7,6 +7,9 @@ from .forms import CadastroLivro, CategoriaLivro
 from django import forms
 from django.db.models import Q
 
+# TODO: ESTÉTICA
+# TODO: Página Inicial
+
 # Create your views here.
 
 def home(request):
@@ -174,9 +177,11 @@ def processa_avaliacao(request):
     #print(request.POST)
     #print(id_emprestimo)
     #return HttpResponse( f"{id_emprestimo} {opcoes}")
-    #TODO: Verificar segurança
-    #TODO: Não permitir avaliação de livro não devolvido
-    #TODO: Colocar as estrelas
+    #TODO: Verificar segurança. - ok
+    #TODO: Não permitir avaliação de livro não devolvido. - ok
+    #TODO: Colocar as estrelas. - ok
+    #TODO: Colocar variáveis necessárias para botão opções na página seus empréstimos.
+    #TODO: Colocar imagens.
     emprestimo = Emprestimos.objects.get(id = id_emprestimo)
     if emprestimo.livro.usuario.id == request.session['usuario']:
         emprestimo.avaliacao = opcoes
