@@ -78,7 +78,10 @@ def ver_livros(request, id):
 def cadastrar_livro(request):
     if request.method == 'POST':
         form = CadastroLivro(request.POST)
-        print(request.POST)
+        imagem = request.FILES.get('img')
+        print(imagem)
+        return HttpResponse('teste')
+
         if form.is_valid():
             form.save()
             #return HttpResponse(request.POST)
