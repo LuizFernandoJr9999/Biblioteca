@@ -1,7 +1,8 @@
 from django.db import models
 from datetime import date
-from usuarios.models import Usuario
 import datetime 
+from django.db.models.base import Model
+from usuarios.models import Usuario
 
 class Categoria(models.Model):
     nome = models.CharField(max_length = 30)
@@ -13,7 +14,7 @@ class Categoria(models.Model):
 
 class Livros(models.Model):
     # TODO: Colocar imagens
-    img = models.ImageField(upload_to='capa_livro', null=True, blank=True)
+    img = models.ImageField (upload_to='capa_livro', null=True, blank=True)
     nome = models.CharField(max_length = 100)
     autor = models.CharField(max_length = 30)
     co_autor = models.CharField(max_length = 30, blank = True)

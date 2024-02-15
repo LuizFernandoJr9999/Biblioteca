@@ -12,11 +12,12 @@
   {% endif %}     
     
   <div class="row">
-
     {% for livro in livros %}
         <div class="col-md">
           <div class="card" style="width: 18rem;">
             <div class="card-body">
+              <!--img src="\media\capa_livro\images.jpg" -->
+              <img src="{{livro.img.url}}"" width="100%"  >
               <h5 class="card-title">{{livro.nome}}</h5>
               <h6 style="display: inline" class="card-subtitle mb-2 text-muted">Emprestado</h6>
               {% if livro.emprestado%}
